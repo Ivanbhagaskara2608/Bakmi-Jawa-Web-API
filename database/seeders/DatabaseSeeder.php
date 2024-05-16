@@ -21,5 +21,13 @@ class DatabaseSeeder extends Seeder
         \App\Models\Role::create([
             'nama' => 'User'
         ]);
+
+        \App\Models\User::create([
+            'nama' => 'admin',
+            'no_telp' => '081234567890',
+            'tanggal_lahir' => '2000-01-01',
+            'password' => bcrypt('admin'),
+            'role_id' => 1
+        ]);
     }
 }
