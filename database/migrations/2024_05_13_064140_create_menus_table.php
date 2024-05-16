@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('harga');
             $table->string('gambar');
             $table->enum('kategori', ['makanan', 'minuman']);
-            $table->enum('status', ['available', 'unavailable']);
+            $table->enum('status', ['available', 'unavailable'])->default('available');
             $table->integer('point_required')->default(0);
             $table->timestamps();
         });

@@ -19,3 +19,5 @@ use Illuminate\Support\Facades\Route;
 // });
 Route::get('/login', [WebController::class, 'login'])->name('login');
 Route::get('/', [WebController::class, 'index'])->name('dashboard.index');
+Route::get('/menu', [WebController::class, 'menu'])->name('dashboard.menu');
+Route::get('/reward', [WebController::class, 'reward'])->name('dashboard.reward');

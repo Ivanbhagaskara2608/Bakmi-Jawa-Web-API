@@ -8,11 +8,21 @@ class WebController extends Controller
 {
     public function index()
     {
-        return view('Dashboard.contents.index');
+        return view('dashboard.contents.index');
     }
 
     public function login()
     {
-        return view('Login.index');
+        return view('login.index');
+    }
+
+    public function menu()
+    {
+        return view('dashboard.contents.menu');
+    }
+
+    public function reward()
+    {
+        return view('dashboard.contents.rewards');
     }
 }

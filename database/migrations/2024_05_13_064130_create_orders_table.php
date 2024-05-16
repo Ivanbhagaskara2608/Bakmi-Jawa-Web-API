@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('payment_id');
             $table->enum('order_type', ['dine_in', 'take_away']);
-            $table->enum('status', ['pending', 'completed', 'cancelled']);
+            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
             $table->boolean('is_point_used')->default(false);
             $table->timestamps();
         });
