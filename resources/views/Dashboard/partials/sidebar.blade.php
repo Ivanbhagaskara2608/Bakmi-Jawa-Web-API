@@ -20,8 +20,8 @@
               </p>
             </a>
           </li>
-          <li class="nav-item menu-close">
-            <a href="#" class="nav-link">
+          <li class="nav-item {{ Request::routeIs('pesanan.*') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ Request::routeIs('pesanan.*') ? 'active' : '' }}">
               <i class="nav-icon fas fa-shopping-cart"></i>
               <p>
                 Pesanan
@@ -29,14 +29,14 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link active">
+              <li class="nav-item {{ Request::routeIs('pesanan.*') ? 'menu-open' : '' }}">
+                <a href="{{ route('pesanan.dinein') }}" class="nav-link {{ Request::routeIs('pesanan.dinein') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Dine In</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
+              <li class="nav-item {{ Request::routeIs('pesanan.*') ? 'menu-open' : '' }}">
+                <a href="{{ route('pesanan.takeaway') }}" class="nav-link {{ Request::routeIs('pesanan.takeaway') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Take Away</p>
                 </a>
@@ -44,7 +44,7 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="{{ route('dashboard.menu') }}" class="nav-link {{ url()->current() == route('dashboard.menu') ? 'active' : '' }}">
+            <a href="{{ route('menu.index') }}" class="nav-link {{ Request::routeIs('menu.index') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-utensils"></i>
               <p>
                 Menu
@@ -52,7 +52,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ route('dashboard.reward') }}" class="nav-link {{ url()->current() == route('dashboard.reward') ? 'active' : '' }}">
+            <a href="{{ route('reward.index') }}" class="nav-link {{ Request::routeIs('reward.index') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-star"></i>
               <p>
                 Rewards

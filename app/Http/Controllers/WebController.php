@@ -25,4 +25,14 @@ class WebController extends Controller
     {
         return view('dashboard.contents.rewards');
     }
+
+    public function dinein()
+    {
+        return view('dashboard.contents.dinein');
+    }
+
+    public function takeaway()
+    {
+        return view('dashboard.contents.takeaway');
+    }
 }

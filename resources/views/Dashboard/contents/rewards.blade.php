@@ -18,7 +18,7 @@
                 <div class="row">
                     <div class="col-xl-8">
                         <!-- Default box -->
-                        <div class="card">
+                        <div class="card card-outline card-primary">
                             <div class="card-header">
                                 <h3 class="card-title">Daftar Rewards</h3>
                             </div>
@@ -42,7 +42,7 @@
                         <!-- /.card -->
                     </div>
                     <div class="col-xl-4">
-                        <div class="card">
+                        <div class="card card-outline card-primary">
                             <div class="card-header">
                                 <h3 class="card-title">Tambah Reward</h3>
                             </div>
