@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Web\MenuController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +30,5 @@ Route::prefix('user')->group(function () {
         Route::post('/update-profile', 'updateProfile');
     });
 });
+
+Route::post('/store', [MenuController::class, 'store']);

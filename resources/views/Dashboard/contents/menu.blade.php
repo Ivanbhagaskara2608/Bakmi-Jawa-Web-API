@@ -50,47 +50,44 @@
                                 <h3 class="card-title">Tambah Menu</h3>
                             </div>
                             <div class="card-body">
-                                <form action="" method="post"
-                                id="form-add-menu">
+                                <form action="{{ route('menu.store') }}" method="post" enctype="multipart/form-data" id="form-add-menu">
                                     @csrf
                                     <div class="mb-3">
-                                        <label for="name">Nama :</label>
-                                        <input type="text" name="name" id="name" class="form-control">
+                                        <label for="nama">Nama :</label>
+                                        <input type="text" name="nama" id="nama" class="form-control">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="category">Kategori :</label>
-                                        <select name="category" id="category" class="form-control select2bs4">
+                                        <label for="kategori">Kategori :</label>
+                                        <select name="kategori" id="kategori" class="form-control select2bs4">
                                             <option selected disabled>-- Please select --</option>
                                             <option value="makanan">Makanan</option>
                                             <option value="minuman">Minuman</option>
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="price">Harga :</label>
-                                        <input type="text" name="price" id="price" class="form-control"
-                                            oninput="formatCurrency(this)">
+                                        <label for="harga">Harga :</label>
+                                        <input type="text" name="harga" id="harga" class="form-control" oninput="formatCurrency(this)">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="description">Description :</label>
-                                        <textarea name="description" id="description" class="form-control" rows="3"></textarea>
+                                        <label for="deskripsi">Deskripsi :</label>
+                                        <textarea name="deskripsi" id="deskripsi" class="form-control" rows="3"></textarea>
                                     </div>
                                     <div class="mb-3">
                                         <div class="row mb-3">
                                             <div class="col-md-6">
-                                                <label for="images">Gambar :</label>
+                                                <label for="gambar">Gambar :</label>
                                             </div>
                                         </div>
                                         <div id="images-container">
                                             <div class="custom-file mb-3">
-                                                <input type="file" class="custom-file-input" name="images[]"
-                                                    id="images" accept="image/*">
-                                                <label class="custom-file-label" for="images">Pilih file</label>
+                                                <input type="file" class="custom-file-input" name="gambar" id="gambar" accept="image/*">
+                                                <label class="custom-file-label" for="gambar">Pilih file</label>
                                             </div>
                                         </div>
                                     </div>
-                                    <button id="submitAdd" type="submit" class="btn btn-success"><i
-                                            class="fas fa-plus mr-1"></i>Tambah Menu</button>
+                                    <button id="submitAdd" type="submit" class="btn btn-success"><i class="fas fa-plus mr-1"></i>Tambah Menu</button>
                                 </form>
+                                
                             </div>
                         </div>
                     </div>
@@ -119,4 +116,7 @@
 @endsection
 
 @section('js')
+    <script>
+        
+    </script>
 @endsection

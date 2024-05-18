@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Web\UserController;
+use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\MenuController;
+use App\Http\Controllers\Web\OrderController;
+use App\Http\Controllers\Web\RewardController;
 use App\Http\Controllers\WebController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,18 +22,19 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('index');
 // });
-Route::get('/login', [WebController::class, 'login'])->name('login');
-Route::get('/', [WebController::class, 'index'])->name('dashboard.index');
+Route::get('/login', [UserController::class, 'index'])->name('login');
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::group(['prefix' => 'pesanan', 'as' => 'pesanan.'], function () {
-    Route::get('/dinein', [WebController::class, 'dinein'])->name('dinein');
-    Route::get('/takeaway', [WebController::class, 'takeaway'])->name('takeaway');
+    Route::get('/dinein', [OrderController::class, 'dinein'])->name('dinein');
+    Route::get('/takeaway', [OrderController::class, 'takeaway'])->name('takeaway');
 });
 
 Route::group(['prefix' => 'menu', 'as' => 'menu.'], function () {
-    Route::get('/menu', [WebController::class, 'menu'])->name('index');
+    Route::get('/', [MenuController::class, 'index'])->name('index');
+    Route::post('/store', [MenuController::class, 'store'])->name('store');
 });
 
 Route::group(['prefix' => 'reward', 'as' => 'reward.'], function () {
-    Route::get('/reward', [WebController::class, 'reward'])->name('index');
+    Route::get('/', [RewardController::class, 'index'])->name('index');
 });
