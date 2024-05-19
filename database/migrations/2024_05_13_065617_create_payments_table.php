@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('order_id');
             $table->string('payment_method')->nullable();
             $table->string('payment_method_code')->nullable();
             $table->enum('status', ['FAILED', 'PAID', 'EXPIRED', 'UNPAID'])->default('UNPAID');

@@ -33,8 +33,17 @@ Route::group(['prefix' => 'pesanan', 'as' => 'pesanan.'], function () {
 Route::group(['prefix' => 'menu', 'as' => 'menu.'], function () {
     Route::get('/', [MenuController::class, 'index'])->name('index');
     Route::post('/store', [MenuController::class, 'store'])->name('store');
+    Route::get('/data', [MenuController::class, 'data_menu'])->name('data');
+    Route::get('/{id}', [MenuController::class, 'show'])->name('show');
+    Route::post('/update/{id}', [MenuController::class, 'update'])->name('update');
+    Route::post('/delete/{id}', [MenuController::class, 'destroy'])->name('delete');
 });
 
 Route::group(['prefix' => 'reward', 'as' => 'reward.'], function () {
     Route::get('/', [RewardController::class, 'index'])->name('index');
+    Route::post('/store', [RewardController::class, 'store'])->name('store');
+    Route::get('/data', [RewardController::class, 'data_reward'])->name('data');
+    Route::get('/{id}', [RewardController::class, 'show'])->name('show');
+    Route::post('/update/{id}', [RewardController::class, 'update'])->name('update');
+    Route::post('/delete/{id}', [RewardController::class, 'destroy'])->name('delete');
 });

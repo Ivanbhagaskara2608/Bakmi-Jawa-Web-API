@@ -1,6 +1,10 @@
 @extends('dashboard.app')
 
 @section('content')
+
+  <?php
+    $totalMenu = \App\Models\Menu::count();
+  ?>
       <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -31,7 +35,7 @@
               <div class="icon">
                 <i class="fas fa-shopping-cart"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{ route('pesanan.dinein') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -46,14 +50,14 @@
               <div class="icon">
                 <i class="fas fa-shopping-cart"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{ route('pesanan.takeaway') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <div class="col-lg-4 col-6">
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>10</h3>
+                <h3>{{ $totalMenu }}</h3>
 
                 <p>Menu</p>
               </div>

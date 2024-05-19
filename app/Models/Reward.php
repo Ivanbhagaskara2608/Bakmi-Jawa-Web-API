@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Menu extends Model
+class Reward extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'nama',
-        'kategori',
-        'harga',
-        'deskripsi',
-        'gambar',
-        'status'
+        'menu_id',
+        'point_required'
     ];
+
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class, 'menu_id');
+    }
 }

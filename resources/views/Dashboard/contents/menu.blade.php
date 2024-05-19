@@ -117,6 +117,151 @@
 
 @section('js')
     <script>
-        
+        $(document).ready(function() {
+            dataTable();
+        })
+
+        function dataTable() {
+            $('#dt-container').html('');
+            $('#dt-container').html(`
+                <table class="table table-bordered table-striped" id="dt-data">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nama</th>
+                            <th>Kategori</th>
+                            <th>Harga</th>
+                            <th>Status</th>
+                            <th>Gambar</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                </table>
+            `)
+
+            $('#dt-data').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('menu.data') }}",
+                columnDefs: [{
+                    className: 'text-center',
+                    targets: [0, 2, 3, 5, 6]
+                }],
+                columns: [
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+                    { data: 'nama', name: 'nama' },
+                    { data: 'kategori', name: 'kategori' },
+                    { data: 'harga', name: 'harga' },
+                    { data: 'status', name: 'status',
+                        className: 'text-center',
+                        render: function(data, type, row) {
+                            return `<span class="badge badge-${row.status == 'TERSEDIA' ? 'success' : 'secondary'}">${row.status}</span>`
+                        }
+                     },
+                    { data: 'gambar', name: 'gambar' },
+                    {
+                        data: 'id',
+                        name: 'id',
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, full, meta) {
+                            return `
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editModal" onclick="editMenu(${data})"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="deleteMenu(${data})"><i class="fas fa-trash"></i></button>
+                                </div>
+                            `;
+                        }
+                    }
+                ]
+            });
+        }
+
+        function previewEditImage(event) {
+            var editImage = document.getElementById('editImagePreview');
+            editImage.src = URL.createObjectURL(event.target.files[0]);
+        }
+
+        function editMenu(id) {
+            $('#editModalBody').html('');
+            $.ajax({
+                url: `menu/${id}`,
+                type: 'GET',
+                success: function(response) {
+                    $('#editModalBody').html(`
+                        <img id="editImagePreview" src="{{ asset('/images/menu/${response.gambar}') }}" class="img-fluid mb-3" alt="${response.nama}">
+                        <form action="menu/update/${id}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="nama">Nama :</label>
+                                <input type="text" name="nama" id="nama" class="form-control" value="${response.nama}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="status">Status :</label>
+                                    <select name="status" id="status" class="form-control select2bs4">
+                                        <option value="TERSEDIA" ${response.status === 'TERSEDIA' ? 'selected' : ''}>TERSEDIA</option>
+                                        <option value="HABIS" ${response.status === 'HABIS' ? 'selected' : ''}>HABIS</option>
+                                    </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="kategori">Kategori :</label>
+                                    <select name="kategori" id="kategori" class="form-control select2bs4">
+                                        <option value="makanan" ${response.kategori === 'makanan' ? 'selected' : ''}>Makanan</option>
+                                        <option value="minuman" ${response.kategori === 'minuman' ? 'selected' : ''}>Minuman</option>
+                                    </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="harga">Harga :</label>
+                                <input type="text" name="harga" id="harga" class="form-control" oninput="formatCurrency(this)" value="${response.harga}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="deskripsi">Deskripsi :</label>
+                                <textarea name="deskripsi" id="deskripsi" class="form-control" rows="3">${response.deskripsi}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="gambar">Image :</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="gambar" id="gambar" accept="image/*" onchange="previewEditImage(event)">
+                                    <label class="custom-file-label" for="gambar">Pilih file</label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save mr-1"></i>Simpan</button>
+                        </form>
+                    `);
+                    bsCustomFileInput.init();
+                }
+            })
+        }
+
+        function deleteMenu(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `menu/delete/${id}`,
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            Swal.fire(
+                                'Terhapus!',
+                                'Data berhasil dihapus.',
+                                'success'
+                            )
+                            dataTable();
+                        }
+                    })
+                }
+            })
+        }
     </script>
 @endsection

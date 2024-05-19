@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('rewards', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->enum('order_type', ['dine_in', 'take_away']);
-            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
-            $table->boolean('is_point_used')->default(false);
+            $table->foreignId('menu_id');
+            $table->integer('point_required');
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('rewards');
     }
 };

@@ -47,16 +47,23 @@
                                 <h3 class="card-title">Tambah Reward</h3>
                             </div>
                             <div class="card-body">
-                                <form action="" method="post"
-                                id="form-add-menu">
+                                <form action="{{ route('reward.store') }}" method="post"
+                                id="form-add-reward">
                                     @csrf
                                     <div class="mb-3">
-                                        <label for="menu">Menu :</label>
-                                        <input type="text" name="menu" id="menu" class="form-control">
+                                        <label for="menu_id">Menu :</label>
+                                        <select name="menu_id" id="menu_id" class="form-control select2bs4">
+                                            <option selected disabled>-- Please select --</option>
+                                            @foreach (\App\Models\Menu::all() as $menu)
+                                                @if (!\App\Models\Reward::where('menu_id', $menu->id)->exists())
+                                                    <option value="{{ $menu->id }}">{{ $menu->nama }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="point">Poin :</label>
-                                        <input type="number" name="point" id="point" class="form-control">
+                                        <label for="point_required">Poin :</label>
+                                        <input type="number" name="point_required" id="point_required" class="form-control">
                                     </div>
                                     <button id="submitAdd" type="submit" class="btn btn-success"><i
                                             class="fas fa-plus mr-1"></i>Tambah Reward</button>
@@ -89,4 +96,101 @@
 @endsection
 
 @section('js')
+    <script>
+        $(document).ready(function() {
+            dataTable();
+        })
+
+        function dataTable() {
+            $('#dt-data').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ route('reward.data') }}',
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
+                    },
+                    {
+                        data: 'menu',
+                        name: 'menu'
+                    },
+                    {
+                        data: 'point_required',
+                        name: 'point_required'
+                    },
+                    {
+                        data: 'id',
+                        name: 'id',
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, full, meta) {
+                            return `
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editModal" onclick="editReward(${data})"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="deleteReward(${data})"><i class="fas fa-trash"></i></button>
+                                </div>
+                            `;
+                        }
+                    }
+                ]
+            });
+        }
+
+        function editReward(id) {
+            $('#editModalBody').html('');
+            $.ajax({
+                url: `reward/${id}`,
+                method: 'GET',
+                success: function(response) {
+                    $('#editModalBody').html(`
+                        <div class="text-center">
+                            <h5 class="mb-3 font-weight-bold">${response.nama_menu}</h5>
+                            <img id="editImagePreview" src="{{ asset('/images/menu/${response.gambar}') }}" class="img-fluid mb-3" alt="${response.nama}">
+                        </div>
+                        <form action="reward/update/${id}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="point_required">Poin :</label>
+                                <input type="number" name="point_required" id="point_required" class="form-control" value="${response.reward.point_required}">
+                            </div>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save mr-1"></i>Simpan</button>
+                        </form>
+                    `);
+                }
+            })
+        }
+
+        function deleteReward(id) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Anda tidak akan dapat mengembalikan ini!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `reward/delete/${id}`,
+                        method: 'POST',
+                        data: {
+                            "_token": "{{ csrf_token() }}"
+                        },
+                        success: function(response) {
+                            Swal.fire(
+                                'Terhapus!',
+                                'Data berhasil dihapus.',
+                                'success'
+                            ).then(() => {
+                                window.location.href = '{{ route('reward.index') }}';
+                            });
+                    
+                        }
+                    })
+                }
+            })
+        }
+
+    </script>
 @endsection
