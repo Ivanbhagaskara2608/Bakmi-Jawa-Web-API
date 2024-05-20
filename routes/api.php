@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Web\MenuController;
+use App\Http\Controllers\Api\MenuController;
+use App\Http\Controllers\Api\RewardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 Route::get('/user', 'App\Http\Controllers\Api\UserController@index');
+// Route::get('/menu/image/{image}', 'App\Http\Controllers\Api\MenuController@get_image');
 Route::prefix('user')->group(function () {
     Route::controller(UserController::class)->group(function () {
         Route::get('/index', 'index');
@@ -31,4 +33,17 @@ Route::prefix('user')->group(function () {
     });
 });
 
-Route::post('/store', [MenuController::class, 'store']);
+Route::prefix('menu')->group(function () {
+    Route::controller(MenuController::class)->group(function () {
+        Route::get('/index', 'index');
+        Route::get('/show/{id}', 'show');
+        Route::get('/image/{image}', 'get_image');
+    });
+});
+
+Route::prefix('reward')->group(function () {
+    Route::controller(RewardController::class)->group(function () {
+        Route::get('/index', 'index');
+        Route::get('/show/{id}', 'show');
+    });
+});

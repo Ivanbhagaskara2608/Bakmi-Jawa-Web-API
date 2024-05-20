@@ -19,7 +19,7 @@ class MenuController extends Controller
         $request->validate([
             'nama' => 'required|min:3|max:255',
             'harga' => 'required|integer',
-            'kategori' => 'required|in:makanan,minuman',
+            'kategori' => 'required|in:Makanan,Minuman,Cemilan',
             'deskripsi' => 'required|min:3',
             'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
@@ -66,7 +66,7 @@ class MenuController extends Controller
         $request->validate([
             'nama' => 'required|min:3|max:255',
             'harga' => 'required|integer',
-            'kategori' => 'required|in:makanan,minuman',
+            'kategori' => 'required|in:Makanan,Minuman,Cemilan',
             'status' => 'required|in:TERSEDIA,HABIS',
             'deskripsi' => 'required|min:3',
             'gambar' => 'image|mimes:jpeg,png,jpg|max:2048',

@@ -14,7 +14,7 @@ class UserController extends Controller
     public function index()
     {
         return response()->json([
-            'status' => 'success',
+            'status' => true,
             'message' => 'Hello World!'
         ]);
     }
@@ -22,7 +22,7 @@ class UserController extends Controller
     public function profile()
     {
         return response()->json([
-            'status' => 'success',
+            'status' => true,
             'message' => 'User profile',
             'data' => auth('sanctum')->user()
         ]);
@@ -40,7 +40,7 @@ class UserController extends Controller
             $token = $request->user()->createToken('api-android')->plainTextToken;
 
             return response()->json([
-                'status' => 'success',
+                'status' => true,
                 'message' => 'User berhasil login',
                 'data' => $user,
                 'token' => $token
@@ -66,7 +66,7 @@ class UserController extends Controller
         ]);
 
         return response()->json([
-            'status' => 'success',
+            'status' => true,
             'message' => 'User berhasil didaftarkan',
             'data' => $user
         ]);
@@ -77,7 +77,7 @@ class UserController extends Controller
         auth('sanctum')->user()->tokens()->delete();
 
         return response()->json([
-            'status' => 'success',
+            'status' => true,
             'message' => 'User berhasil logout'
         ]);
     }
@@ -94,7 +94,7 @@ class UserController extends Controller
         if (Hash::check($request->old_password, $user->password)) {
             if ($request->old_password == $request->new_password) {
                 return response()->json([
-                    'status' => 'error',
+                    'status' => false,
                     'message' => 'Password baru tidak boleh sama dengan password lama'
                 ]);
             }
@@ -103,13 +103,13 @@ class UserController extends Controller
             $user->save();
 
             return response()->json([
-                'status' => 'success',
+                'status' => true,
                 'message' => 'Password berhasil diubah'
             ]);
         }
 
         return response()->json([
-            'status' => 'error',
+            'status' => false,
             'message' => 'Password lama tidak sesuai'
         ]);
     }
@@ -126,7 +126,7 @@ class UserController extends Controller
         $user->update($request->all());
 
         return response()->json([
-            'status' => 'success',
+            'status' => true,
             'message' => 'Profil berhasil diubah',
             'data' => $user
         ]);

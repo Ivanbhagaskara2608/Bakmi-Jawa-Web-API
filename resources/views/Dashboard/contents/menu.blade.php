@@ -60,8 +60,9 @@
                                         <label for="kategori">Kategori :</label>
                                         <select name="kategori" id="kategori" class="form-control select2bs4">
                                             <option selected disabled>-- Please select --</option>
-                                            <option value="makanan">Makanan</option>
-                                            <option value="minuman">Minuman</option>
+                                            <option value="Makanan">Makanan</option>
+                                            <option value="Minuman">Minuman</option>
+                                            <option value="Cemilan">Cemilan</option>
                                         </select>
                                     </div>
                                     <div class="mb-3">
@@ -206,8 +207,9 @@
                             <div class="mb-3">
                                 <label for="kategori">Kategori :</label>
                                     <select name="kategori" id="kategori" class="form-control select2bs4">
-                                        <option value="makanan" ${response.kategori === 'makanan' ? 'selected' : ''}>Makanan</option>
-                                        <option value="minuman" ${response.kategori === 'minuman' ? 'selected' : ''}>Minuman</option>
+                                        <option value="Makanan" ${response.kategori === 'Makanan' ? 'selected' : ''}>Makanan</option>
+                                        <option value="Minuman" ${response.kategori === 'Minuman' ? 'selected' : ''}>Minuman</option>
+                                        <option value="Cemilan" ${response.kategori === 'Cemilan' ? 'selected' : ''}>Cemilan</option>
                                     </select>
                             </div>
                             <div class="mb-3">
