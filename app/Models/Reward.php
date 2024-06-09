@@ -10,7 +10,7 @@ class Reward extends Model
     use HasFactory;
     protected $fillable = [
         'menu_id',
-        'point_required'
+        'point'
     ];
 
     public function menu()

@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <title>Admin Bakmi Jawa Pak Surat</title>
   <link rel="icon" href="{{ asset('dist/img/Logo_Bakmi.png') }}">
 
@@ -26,6 +27,8 @@
   <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('admin/plugins/select2/css/select2.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -73,6 +76,7 @@
 <!-- AdminLTE App -->
 <script src="{{ asset('dist/js/adminlte.js') }}"></script>
 <script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+<script src="{{ asset('admin/plugins/select2/js/select2.min.js') }}"></script>
 
 <script src="{{ asset('plugins/datatables/jquery.dataTables.js') }}"></script>
 <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -86,11 +90,28 @@
 
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
 @include('sweetalert::alert')
+<script src="{{ asset('plugins/accounting/accounting.min.js') }}"></script>
 
 <script>
   $(document).ready(function () {
+    $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
       bsCustomFileInput.init()
   })
+
+  function formatCurrency(input) {
+      var priceValue = input.value;
+      priceValue = accounting.unformat(priceValue);
+
+      var formattedPrice = accounting.formatMoney(priceValue, "Rp ", 0);
+      input.value = formattedPrice;
+  }
+  function unformatCurrency(input) {
+      var priceValue = input.value;
+      priceValue = accounting.unformat(priceValue);
+      input.value = priceValue;
+  }
 </script>
 
 @yield('js')

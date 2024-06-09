@@ -42,8 +42,10 @@ class UserController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'User berhasil login',
-                'data' => $user,
-                'token' => $token
+                'data' => [
+                    'user' => $user,
+                    'token' => $token,
+                ]
             ]);
         }
     }
@@ -118,7 +120,6 @@ class UserController extends Controller
     {
         $request->validate([
             'nama' => 'min:3|max:72',
-            'no_telp' => 'unique:users,no_telp',
             'tanggal_lahir' => 'date|before:today'
         ]);
 

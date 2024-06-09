@@ -18,7 +18,7 @@ class RewardController extends Controller
     {
         $request->validate([
             'menu_id' => 'required|exists:menus,id',
-            'point_required' => 'required|integer',
+            'point' => 'required|integer',
         ]);
 
         Reward::create($request->all());
@@ -54,7 +54,7 @@ class RewardController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'point_required' => 'required|integer',
+            'point' => 'required|integer',
         ]);
 
         $reward = Reward::findOrFail($id);
