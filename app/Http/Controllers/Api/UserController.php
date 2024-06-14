@@ -115,20 +115,24 @@ class UserController extends Controller
     }
 
     public function updateProfile(Request $request)
-    {
-        $request->validate([
-            'nama' => 'min:3|max:72',
-            'no_telp' => 'unique:users,no_telp',
-            'tanggal_lahir' => 'date|before:today'
-        ]);
+{
+    $user = auth('sanctum')->user();
 
-        $user = auth('sanctum')->user();
-        $user->update($request->all());
+    $request->validate([
+        'nama' => 'min:3|max:72',
+        'no_telp' => [
+            'unique:users,no_telp,' . $user->id,
+        ],
+        'tanggal_lahir' => 'date|before:today'
+    ]);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Profil berhasil diubah',
-            'data' => $user
-        ]);
-    }
+    $user->update($request->all());
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Profil berhasil diubah',
+        'data' => $user
+    ]);
+}
+
 }
