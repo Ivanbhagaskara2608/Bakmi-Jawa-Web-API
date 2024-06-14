@@ -42,8 +42,10 @@ class UserController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'User berhasil login',
-                'data' => $user,
-                'token' => $token
+                'data' => [
+                    'user' => $user,
+                    'token' => $token,
+                ]
             ]);
         }
     }
@@ -115,6 +117,11 @@ class UserController extends Controller
     }
 
     public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'nama' => 'min:3|max:72',
+            'tanggal_lahir' => 'date|before:today'
+        ]);
 {
     $user = auth('sanctum')->user();
 

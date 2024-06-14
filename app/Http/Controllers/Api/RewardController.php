@@ -10,7 +10,7 @@ class RewardController extends Controller
 {
     public function index()
     {
-        $rewards = Reward::all();
+        $rewards = Reward::with('menu')->get();
 
         return response()->json([
             'status' => true,

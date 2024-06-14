@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('rewards', function (Blueprint $table) {
             $table->id();
             $table->foreignId('menu_id');
-            $table->integer('point_required');
+            $table->integer('point');
             $table->timestamps();
         });
     }

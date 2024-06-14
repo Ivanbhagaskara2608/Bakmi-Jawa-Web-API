@@ -27,9 +27,12 @@ Route::prefix('user')->group(function () {
         Route::get('/index', 'index');
         Route::post('/login', 'login');
         Route::post('/register', 'register');
-        Route::post('/logout', 'logout');
-        Route::post('/change-password', 'changePassword');
-        Route::post('/update-profile', 'updateProfile');
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::get('/profile', 'profile');
+            Route::post('/logout', 'logout');
+            Route::post('/change-password', 'changePassword');
+            Route::post('/update-profile', 'updateProfile');
+        });
     });
 });
 

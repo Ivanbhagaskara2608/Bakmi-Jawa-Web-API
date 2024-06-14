@@ -62,8 +62,8 @@
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="point_required">Poin :</label>
-                                        <input type="number" name="point_required" id="point_required" class="form-control">
+                                        <label for="point">Poin :</label>
+                                        <input type="number" name="point" id="point" class="form-control">
                                     </div>
                                     <button id="submitAdd" type="submit" class="btn btn-success"><i
                                             class="fas fa-plus mr-1"></i>Tambah Reward</button>
@@ -115,8 +115,8 @@
                         name: 'menu'
                     },
                     {
-                        data: 'point_required',
-                        name: 'point_required'
+                        data: 'point',
+                        name: 'point'
                     },
                     {
                         data: 'id',
@@ -150,8 +150,8 @@
                         <form action="reward/update/${id}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
-                                <label for="point_required">Poin :</label>
-                                <input type="number" name="point_required" id="point_required" class="form-control" value="${response.reward.point_required}">
+                                <label for="point">Poin :</label>
+                                <input type="number" name="point" id="point" class="form-control" value="${response.reward.point}">
                             </div>
                             <button type="submit" class="btn btn-success"><i class="fas fa-save mr-1"></i>Simpan</button>
                         </form>

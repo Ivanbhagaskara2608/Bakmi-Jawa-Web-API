@@ -120,6 +120,16 @@
     <script>
         $(document).ready(function() {
             dataTable();
+
+            $('#form-add-menu').on('submit', function(e) {
+                var priceInput = $('#harga');
+                priceInput.val(accounting.unformat(priceInput.val()));
+            })
+
+            $('#form-edit-menu').on('submit', function(e) {
+                var priceInput = $('#editPrice');
+                priceInput.val(accounting.unformat(priceInput.val()));
+            })
         })
 
         function dataTable() {
