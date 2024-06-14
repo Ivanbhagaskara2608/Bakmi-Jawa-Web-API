@@ -57,7 +57,7 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>17</h3>
+                <h3>{{ $totalMenu }}</h3>
 
                 <p>Menu</p>
               </div>
