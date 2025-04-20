@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Otp;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
 {
@@ -46,18 +49,30 @@ class UserController extends Controller
                     'user' => $user,
                     'token' => $token,
                 ]
-            ]);
+            ], 200);
         }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'No Telp atau Password salah'
+        ], 401);
     }
 
     public function register(Request $request)
     {
         $request->validate([
             'nama' => 'required|min:3|max:72',
-            'no_telp' => 'required|unique:users',
+            'no_telp' => 'required',
             'tanggal_lahir' => 'required|date|before:today',
             'password' => 'required|min:8|max:64|confirmed'
         ]);
+
+        if (User::where('no_telp', $request->no_telp)->exists()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No Telp sudah terdaftar'
+            ]);
+        }
 
         $user = User::create([
             'nama' => $request->nama,
@@ -122,24 +137,163 @@ class UserController extends Controller
             'nama' => 'min:3|max:72',
             'tanggal_lahir' => 'date|before:today'
         ]);
-{
-    $user = auth('sanctum')->user();
 
-    $request->validate([
-        'nama' => 'min:3|max:72',
-        'no_telp' => [
-            'unique:users,no_telp,' . $user->id,
-        ],
-        'tanggal_lahir' => 'date|before:today'
-    ]);
+        $user = auth('sanctum')->user();
+        $user->update($request->all());
 
-    $user->update($request->all());
+        return response()->json([
+            'status' => true,
+            'message' => 'Profile berhasil diubah',
+            'data' => $user
+        ]);
+    }
 
-    return response()->json([
-        'status' => true,
-        'message' => 'Profil berhasil diubah',
-        'data' => $user
-    ]);
-}
+    // create otp
+    public function createOtp(Request $request)
+    {
+        $request->validate([
+            'phone_number' => 'required'
+        ]);
+
+        $otp = Otp::create([
+            'otp' => rand(100000, 999999),
+            'phone_number' => $request->phone_number,
+            'expired_at' => now()->addMinutes(5)
+        ]);
+
+        $response = Http::withHeaders(['Authorization' => env('FONNTE')])->post('https://api.fonnte.com/send',[
+            'target' => '62' . $request->phone_number,
+            'message' => 'Kode OTP: ' . $otp['otp'] . ' berlaku selama 5 menit',
+        ]);
+
+        if ($response->successful()) {
+            $response = $response->json();
+            if ($response['status'] == false) {
+                return Response::json([
+                    'success' => false,
+                    'message' => 'Gagal mengirim SMS',
+                ]);
+            };
+        } else {
+            return Response::json([
+                'success' => false,
+                'message' => 'Gagal mengirim SMS',
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'OTP berhasil dibuat',
+            'data' => $otp
+        ]);
+    }
+
+    // verify otp
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'phone_number' => 'required',
+            'otp' => 'required'
+        ]);
+
+        $otp = Otp::where('phone_number', $request->phone_number)
+            ->where('otp', $request->otp)
+            ->where('expired_at', '>=', now())
+            ->first();
+
+        if ($otp) {
+            $otp->is_verified = true;
+            $otp->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'OTP berhasil diverifikasi'
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'OTP tidak valid atau sudah kadaluarsa'
+        ]);
+    }
+
+    // forgot password
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'phone_number' => 'required'
+        ]);
+
+        $user = User::where('no_telp', $request->phone_number)->first();
+
+        if ($user) {
+            $otp = Otp::create([
+                'otp' => rand(100000, 999999),
+                'phone_number' => $request->phone_number,
+                'expired_at' => now()->addMinutes(5)
+            ]);
+
+            $response = Http::withHeaders(['Authorization' => env('FONNTE')])->post('https://api.fonnte.com/send',[
+                'target' => '62' . $request->phone_number,
+                'message' => 'Kode OTP: ' . $otp['otp'] . ' berlaku selama 5 menit',
+            ]);
+
+            if ($response->successful()) {
+                $response = $response->json();
+                if ($response['status'] == false) {
+                    return Response::json([
+                        'success' => false,
+                        'message' => 'Gagal mengirim SMS',
+                    ]);
+                };
+            } else {
+                return Response::json([
+                    'success' => false,
+                    'message' => 'Gagal mengirim SMS',
+                ]);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'OTP berhasil dibuat',
+                'data' => $otp
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Nomor telepon tidak terdaftar'
+        ]);
+    }
+
+    // reset password
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'phone_number' => 'required',
+            'password' => 'required|min:8|max:64|confirmed'
+        ]);
+
+        $otp = Otp::where('phone_number', $request->phone_number)
+            ->where('expired_at', '>=', now())
+            ->where('is_verified', true)
+            ->first();
+
+        if (!$otp) {
+            return response()->json([
+                'status' => false,
+                'message' => 'OTP tidak valid atau sudah kadaluarsa'
+            ]);
+        }
+
+        $user = User::where('no_telp', $request->phone_number)->first();
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Password berhasil diubah'
+        ]);
+    }
 
 }

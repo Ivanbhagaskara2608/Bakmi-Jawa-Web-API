@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('menu_id');
             $table->integer('point');
             $table->timestamps();
+            
         });
     }
 

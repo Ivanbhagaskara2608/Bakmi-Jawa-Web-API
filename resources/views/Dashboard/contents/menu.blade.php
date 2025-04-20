@@ -18,13 +18,13 @@
                 <div class="row">
                     <div class="col-xl-8">
                         <!-- Default box -->
-                        <div class="card card-outline card-primary">
+                        <div class="card card-outline card-warning">
                             <div class="card-header">
                                 <h3 class="card-title">Daftar Menu</h3>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive" id="dt-container">
-                                    <table class="table table-bordered table-striped" id="dt-data">
+                                    <table class="table table-bordered table-striped" id="dt-data" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -45,7 +45,7 @@
                         <!-- /.card -->
                     </div>
                     <div class="col-xl-4">
-                        <div class="card card-outline card-primary">
+                        <div class="card card-outline card-warning">
                             <div class="card-header">
                                 <h3 class="card-title">Tambah Menu</h3>
                             </div>
@@ -86,7 +86,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button id="submitAdd" type="submit" class="btn btn-success"><i class="fas fa-plus mr-1"></i>Tambah Menu</button>
+                                    <button id="submitAdd" type="submit" class="btn btn-warning"><i class="fas fa-plus mr-1"></i>Tambah Menu</button>
                                 </form>
                                 
                             </div>
@@ -135,7 +135,7 @@
         function dataTable() {
             $('#dt-container').html('');
             $('#dt-container').html(`
-                <table class="table table-bordered table-striped" id="dt-data">
+                <table class="table table-bordered table-striped" id="dt-data" style="width:100%">
                     <thead>
                         <tr>
                             <th>#</th>
